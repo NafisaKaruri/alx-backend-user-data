@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+This module provides utilities for logging user data while redacting sensitive
+Personally Identifiable Information (PII) and securely hashing passwords.
 """
 import re
 
