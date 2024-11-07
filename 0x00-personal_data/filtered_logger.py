@@ -38,8 +38,6 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME")
 
-    if db_name is None:
-        raise valueError("Database name not set in environment variables")
     connector = mysql.connector.connection.MySQLConnection(
             user=db_username,
             password=db_password,
