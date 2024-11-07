@@ -4,9 +4,9 @@ This module provides utilities for logging user data while redacting sensitive
 Personally Identifiable Information (PII) and securely hashing passwords.
 """
 from typing import List
+from os import environ
 import logging
 import mysql.connector
-import os
 import re
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -33,10 +33,10 @@ class RedactingFormatter(logging.Formatter):
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """Returns a connector to the database"""
-    db_username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.getenv("PERSONAL_DATA_DB_NAME")
+    db_username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
     connector = mysql.connector.connection.MySQLConnection(
             user=db_username,
