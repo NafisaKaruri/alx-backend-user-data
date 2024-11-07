@@ -40,7 +40,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
     if db_name is None:
         raise valueError("Database name not set in environment variables")
-    connector = mysql.connector.connect(
+    connector = mysql.connector.connection.MySQLConnection(
             user=db_username,
             password=db_password,
             host=db_host,
