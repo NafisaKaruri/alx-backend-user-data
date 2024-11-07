@@ -5,6 +5,8 @@ Personally Identifiable Information (PII) and securely hashing passwords.
 """
 from typing import List
 import logging
+import mysql.connector
+import os
 import re
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -27,6 +29,24 @@ class RedactingFormatter(logging.Formatter):
         """format"""
         message = super().format(record)
         return filter_datum(self.fields, self.REDACTION, message, ';')
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Returns a connector to the database"""
+    db_username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    if db_name is None:
+        raise valueError("Database name not set in environment variables")
+    connector = mysql.connector.connect(
+            user=db_username,
+            password=db_password,
+            host=db_host,
+            database=db_name
+        )
+    return connector
 
 
 def get_logger() -> logging.Logger:
