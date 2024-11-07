@@ -67,3 +67,25 @@ def filter_datum(fields: List[str], redaction: str, message: str,
         message = re.sub(f'{i}=.*?{separator}',
                          f'{i}={redaction}{separator}', message)
     return message
+
+
+def main():
+    """Obtain a database connection and retrieve all rows in users table
+    and display each row under a filtered format."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    field_names = [x[0] for x in cursor.description]
+
+    logger = get_logger()
+
+    for row in cursor:
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
